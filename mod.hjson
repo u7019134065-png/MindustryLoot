@@ -1,0 +1,7 @@
+name: "InstantDrillBoost"
+displayName: "⚡ Instant Drill Boost"
+author: "ЕЕее1405"
+version: "1.0"
+minGameVersion: 146
+description: "Все буры (включая модовые) добывают моментально с ускорением 9999%."
+scripts: ["boostDrills.js"]
