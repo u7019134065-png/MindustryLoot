@@ -1,16 +1,22 @@
 // Автор: ЕЕее1405
-// Версия: 1.0
-// Ускоряет ВСЕ буры в игре, даже из других модов
+// Версия: 1.1
+// Исправлено: вылет при старте из-за раннего вызова
 
-Events.on(ContentInitEvent, () => {
-    Vars.content.blocks().each(block => {
-        // Проверяем, что блок умеет добывать
-        if (block.drillTime > 0 || block.tier > 0) {
-            block.drillTime = 0.0001; // моментальная добыча
-            block.drillSpeed = 9999;  // ускорение
-            block.warmupSpeed = 9999; // разгон
-            block.update = true;
-        }
-    });
-    Log.info("[InstantDrillBoost] Все буры ускорены в 9999 раз!");
+Events.on(ClientLoadEvent, e => {
+    Timer.schedule(() => {
+        let boosted = 0;
+        Vars.content.blocks().each(block => {
+            try {
+                if (block.drillTime > 0 || block.tier > 0) {
+                    block.drillTime = 0.0001;
+                    block.drillSpeed = 9999;
+                    block.warmupSpeed = 9999;
+                    boosted++;
+                }
+            } catch (err) {
+                Log.err("[InstantDrillBoost] Ошибка при ускорении блока: " + block.name);
+            }
+        });
+        Log.info("[InstantDrillBoost] Ускорено буров: " + boosted);
+    }, 1); // ждём 1 секунду после загрузки клиента
 });
